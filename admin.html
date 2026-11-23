@@ -8,6 +8,7 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 </head>
 <body>
   <header class="top-header">
@@ -22,10 +23,25 @@
     </div>
   </header>
 
-  <div class="container">
+  <div class="container admin-container">
     <h2>Soạn bài mới</h2>
+    <label for="newTitle">Tiêu đề bài báo</label>
     <input type="text" id="newTitle" placeholder="Tiêu đề bài báo">
-    <input type="text" id="newImage" placeholder="URL ảnh minh họa (hoặc để trống)">
+
+    <label for="newImage">Link ảnh (mỗi link một dòng, không bắt buộc)</label>
+    <textarea id="newImage" rows="3" placeholder="https://example.com/anh-bai-bao.jpg"></textarea>
+    <label for="imageFiles">Hoặc chọn nhiều ảnh từ máy tính (JPG, PNG, GIF, WebP...; tối đa 15 MB/ảnh)</label>
+    <input type="file" id="imageFiles" accept="image/*" multiple>
+    <div id="imagePreview" class="media-preview" aria-live="polite"></div>
+
+    <label for="newVideo">Link video (YouTube hoặc link trực tiếp, không bắt buộc)</label>
+    <input type="url" id="newVideo" placeholder="https://www.youtube.com/watch?v=...">
+    <label for="videoFile">Hoặc chọn video từ máy tính (MP4, WebM, Ogg; tối đa 100 MB)</label>
+    <input type="file" id="videoFile" accept="video/mp4,video/webm,video/ogg,.mp4,.webm,.ogv">
+    <div id="videoPreview" class="media-preview" aria-live="polite"></div>
+    <div id="uploadStatus" class="upload-status" role="status" aria-live="polite"></div>
+
+    <label for="newBody">Nội dung bài viết</label>
     <textarea id="newBody" placeholder="Nội dung bài viết"></textarea>
     <select id="newCategory">
       <option value="Tin Thế Giới">Tin Thế Giới</option>
@@ -34,8 +50,8 @@
       <option value="Tin Đơn Vị">Tin Đơn Vị</option>
     </select>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
-      <button class="btn" onclick="saveArticle()">Đăng bài</button>
-      <button class="btn" onclick="resetForm()">Làm mới</button>
+      <button class="btn btn-primary" id="saveArticleButton" type="button" onclick="saveArticle()">Đăng bài</button>
+      <button class="btn btn-secondary" type="button" onclick="resetForm()">Làm mới</button>
     </div>
 
     <hr>
@@ -44,6 +60,9 @@
   </div>
 
   <script src="app.js"></script>
-  <script> showAdminArticles("adminList"); </script>
+  <script>
+    showAdminArticles("adminList");
+    setupMediaPreviews();
+  </script>
 </body>
 </html>
