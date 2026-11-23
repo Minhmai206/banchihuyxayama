@@ -5,10 +5,11 @@
   <title>Admin – Báo Quân đội nhân dân</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
-  <!-- Firebase SDK -->
+  <!-- Firebase is retained only for one-time importing of legacy articles. -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 </head>
 <body>
   <header class="top-header">
@@ -25,6 +26,7 @@
 
   <div class="container admin-container">
     <h2>Soạn bài mới</h2>
+    <p>Đăng nhập bằng tài khoản Supabase đã được cấp quyền admin. Gói Free có tổng dung lượng Storage giới hạn 1 GB.</p>
     <label for="newTitle">Tiêu đề bài báo</label>
     <input type="text" id="newTitle" placeholder="Tiêu đề bài báo">
 
@@ -36,7 +38,7 @@
 
     <label for="newVideo">Link video (YouTube hoặc link trực tiếp, không bắt buộc)</label>
     <input type="url" id="newVideo" placeholder="https://www.youtube.com/watch?v=...">
-    <label for="videoFile">Hoặc chọn video từ máy tính (MP4, WebM, Ogg; tối đa 100 MB)</label>
+    <label for="videoFile">Hoặc chọn video từ máy tính (MP4, WebM, Ogg; tối đa 50 MB/tệp)</label>
     <input type="file" id="videoFile" accept="video/mp4,video/webm,video/ogg,.mp4,.webm,.ogv">
     <div id="videoPreview" class="media-preview" aria-live="polite"></div>
     <div id="uploadStatus" class="upload-status" role="status" aria-live="polite"></div>
@@ -52,6 +54,8 @@
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
       <button class="btn btn-primary" id="saveArticleButton" type="button" onclick="saveArticle()">Đăng bài</button>
       <button class="btn btn-secondary" type="button" onclick="resetForm()">Làm mới</button>
+      <button class="btn btn-secondary" type="button" onclick="migrateLegacyArticles()">Nhập bài cũ từ Firebase</button>
+      <button class="btn btn-secondary" type="button" onclick="logoutAdmin()">Đăng xuất</button>
     </div>
 
     <hr>
@@ -61,8 +65,11 @@
 
   <script src="app.js"></script>
   <script>
-    showAdminArticles("adminList");
-    setupMediaPreviews();
+    requireAdmin().then(isAdmin => {
+      if (!isAdmin) return;
+      showAdminArticles("adminList");
+      setupMediaPreviews();
+    });
   </script>
 </body>
 </html>
