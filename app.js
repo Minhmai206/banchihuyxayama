@@ -1,12 +1,12 @@
 // Firebase setup
 const firebaseConfig = {
-  apiKey: "AIzaSyDny-4u4KzM0t-8kP7Xj1pS1h8m9W1F1j0", // Thay bằng apiKey thật của bạn
+  apiKey: "AIzaSyDcUZoVHrKw8W7Eil8hhwa5v33uByO3TWo", // Thay bằng apiKey thật của bạn
   authDomain: "baoquandoi-aa603.firebaseapp.com",
   databaseURL: "https://baoquandoi-aa603-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "baoquandoi-aa603",
-  storageBucket: "baoquandoi-aa603.appspot.com",
-  messagingSenderId: "1234567890", // Thay bằng messagingSenderId thật
-  appId: "1:1234567890:web:abc123" // Thay bằng appId thật
+  storageBucket: "baoquandoi-aa603.firebasestorage.app",
+  messagingSenderId: "460373885866", // Thay bằng messagingSenderId thật
+  appId: "1:460373885866:web:8c6de78e840b0b0683a1d3" // Thay bằng appId thật
 };
 
 if (!firebase.apps.length) {
