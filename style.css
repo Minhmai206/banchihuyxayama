@@ -1356,6 +1356,40 @@ main {
     cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+.news-card-video-placeholder {
+
+  width: 100%;
+
+  height: 210px;
+
+  display: grid;
+
+  place-items: center;
+
+  background: linear-gradient(135deg, #292929, #555);
+
+  color: #ffffff;
+}
+
+.news-card-video-placeholder span {
+
+  width: 54px;
+
+  height: 54px;
+
+  display: grid;
+
+  place-items: center;
+
+  padding-left: 4px;
+
+  border: 2px solid rgba(255,255,255,0.9);
+
+  border-radius: 50%;
+
+  font-size: 2rem;
+}
+
 
 .news-card:hover img {
 
@@ -1541,6 +1575,73 @@ main {
     0 5px 20px rgba(0,0,0,0.1);
 }
 
+.article-gallery {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+
+  gap: 18px;
+
+  align-items: center;
+
+}
+
+.article-gallery img {
+
+  width: 100%;
+
+  height: auto;
+
+  max-height: 560px;
+
+  object-fit: contain;
+
+  margin: 0;
+
+  background: #f3f4f6;
+
+}
+
+.article-video {
+
+  width: 100%;
+
+  margin: 25px 0;
+
+  overflow: hidden;
+
+  border-radius: 9px;
+
+  background: #111;
+
+  aspect-ratio: 16 / 9;
+
+}
+
+.article-video video,
+.article-video iframe {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  min-height: 0;
+
+  margin: 0;
+
+  border: 0;
+
+}
+
+.article-body {
+
+  overflow-wrap: anywhere;
+
+}
+
 
 .article-full p {
 
@@ -1588,6 +1689,90 @@ main {
 
   border-bottom:
     2px solid #eeeeee;
+}
+
+.admin-container label {
+
+  display: block;
+
+  margin-top: 12px;
+
+  color: #333;
+
+  font-size: 1.35rem;
+
+  font-weight: 700;
+
+}
+
+.media-preview {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin: 4px 0 12px;
+
+}
+
+.media-preview:empty {
+
+  display: none;
+
+}
+
+.media-preview img {
+
+  width: min(180px, 42vw);
+
+  height: 120px;
+
+  object-fit: cover;
+
+  border-radius: 7px;
+
+  border: 1px solid #ddd;
+
+}
+
+.media-preview video {
+
+  width: min(420px, 100%);
+
+  max-height: 240px;
+
+  border-radius: 7px;
+
+  background: #111;
+
+}
+
+.upload-status {
+
+  min-height: 1.8em;
+
+  margin: 8px 0;
+
+  color: #555;
+
+  font-size: 1.3rem;
+
+}
+
+.upload-status.is-error {
+
+  color: #b10d27;
+
+}
+
+#saveArticleButton:disabled {
+
+  cursor: wait;
+
+  opacity: 0.65;
+
 }
 
 
