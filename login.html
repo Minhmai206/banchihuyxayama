@@ -5,6 +5,8 @@
   <title>Đăng nhập</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <style>
     .login-container { max-width:400px; margin:100px auto; padding:30px; background:#fff; border-radius:10px; box-shadow:0 4px 20px rgba(0,0,0,0.1); }
     h2 { color:#c8102e; text-align:center; margin-bottom:20px; }
@@ -17,29 +19,54 @@
 <body>
   <div class="login-container">
     <h2>Đăng nhập</h2>
-    <input type="text" id="username" placeholder="Tên đăng nhập">
-    <input type="password" id="password" placeholder="Mật khẩu">
-    <button onclick="login()">Đăng nhập</button>
-    <p id="msg"></p>
+    <p style="text-align:center;">Dùng email và mật khẩu admin đã tạo trong Supabase Authentication.</p>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email quản trị" autocomplete="username" required>
+      <input type="password" id="password" placeholder="Mật khẩu" autocomplete="current-password" required>
+      <button id="loginButton" type="submit">Đăng nhập</button>
+    </form>
+    <p id="msg" role="status" aria-live="polite"></p>
   </div>
 
   <script>
-    function login() {
-      const user = document.getElementById("username").value.trim();
-      const pass = document.getElementById("password").value.trim();
+    document.getElementById("loginForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
       const msg = document.getElementById("msg");
+      const button = document.getElementById("loginButton");
+      let signedInUserId = "";
 
-      // Tài khoản cứng (demo)
-      if (user === "admin" && pass === "admin123") {
-        localStorage.setItem("role", "admin");
-        window.location.href = "admin.html";
-      } else if (user === "user" && pass === "user123") {
-        localStorage.setItem("role", "user");
-        window.location.href = "index.html";
-      } else {
-        msg.textContent = "Sai tên đăng nhập hoặc mật khẩu!";
+      if (window.supabaseSetupError || !window.supabaseClient) {
+        msg.textContent = window.supabaseSetupError || "Supabase chưa được cấu hình.";
+        return;
       }
-    }
+
+      button.disabled = true;
+      msg.textContent = "Đang đăng nhập...";
+      try {
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        signedInUserId = data.user.id;
+
+        const { data: admin, error: roleError } = await window.supabaseClient
+          .from("admin_users")
+          .select("user_id")
+          .eq("user_id", data.user.id)
+          .maybeSingle();
+        if (roleError) throw roleError;
+        if (!admin) {
+          await window.supabaseClient.auth.signOut();
+          throw new Error("Tài khoản này chưa được cấp quyền quản trị.");
+        }
+        window.location.href = "admin.html";
+      } catch (error) {
+        if (signedInUserId) await window.supabaseClient.auth.signOut();
+        msg.textContent = error.message || "Đăng nhập thất bại.";
+      } finally {
+        button.disabled = false;
+      }
+    });
   </script>
 </body>
 </html>
